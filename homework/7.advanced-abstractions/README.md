@@ -183,6 +183,7 @@ spec:
 practice/7.advanced-abstractions/daemonset.yaml
 
 Создаём deamonSet:
+
 файл daemonset.yaml
 
 ```yaml
