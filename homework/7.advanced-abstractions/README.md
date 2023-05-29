@@ -75,7 +75,7 @@ volumeClaimTemplate - ReadWriteOnce, 5Gi, подключенный по пути
 См пример с rabbitmq из материалов лекции.
 
 Создаём
-Файл statefulset.yaml
+файл statefulset.yaml
 ```yaml
 ---
 apiVersion: apps/v1 
@@ -134,8 +134,7 @@ volumeClaimTemplates:
 вашего сервиса nginx-ingress-controller (тот что в нэймспэйсе ingress-nginx с типом LoadBalancer)
 шли на приложение
 
-Создаём service
-Файл service.yaml
+Создаём service файл service.yaml
 ```yaml
 ---
 kind: Service
@@ -156,7 +155,7 @@ spec:
 ```
 
 Создаём ingress
-Файл ingress.yaml
+файл ingress.yaml
 ```yaml
 ---
 apiVersion: networking.k8s.io/v1
@@ -182,6 +181,9 @@ spec:
 
 * В этом же неймспэйсе создайте DaemonSet node-exporter как в примере к лекции:
 practice/7.advanced-abstractions/daemonset.yaml
+Создаём deamonSet:
+файл daemonset.yaml
+
 ```yaml
 ---
 apiVersion: apps/v1
