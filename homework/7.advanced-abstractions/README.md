@@ -78,20 +78,30 @@ volumeClaimTemplate - ReadWriteOnce, 5Gi, подключенный по пути
 Файл statefulset.yaml
 ```yaml
 ---
-apiVersion: apps/v1 kind: StatefulSet metadata:
-name: prometheus spec:
-serviceName: prometheus replicas: 1
-selector:
-matchLabels:
-app: prometheus
-template: metadata: labels:
-app: prometheus spec:
-serviceAccount: prometheus initContainers:
-- image: busybox
-name: mount-permissions-fix
-command: ["sh", "-c", "chmod 777 /data"] volumeMounts:
-- name: data
-mountPath: /data terminationGracePeriodSeconds: 10 containers:
+apiVersion: apps/v1 
+kind: StatefulSet 
+metadata:
+  name: prometheus 
+spec:
+  serviceName: prometheus 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template: 
+    metadata: 
+      labels:
+        app: prometheus 
+      spec:
+        serviceAccount: prometheus 
+        initContainers:
+          - image: busybox
+          name: mount-permissions-fix
+          command: ["sh", "-c", "chmod 777 /data"] 
+          volumeMounts:
+          - name: data
+          mountPath: /data 
+       terminationGracePeriodSeconds: 10 containers:
 - name: prometheus
 image: prom/prometheus:v2.19.2 ports:
 - name: admin protocol: TCP containerPort: 9090
