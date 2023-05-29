@@ -25,8 +25,9 @@ image: nginx:1.12 # это просто плэйсхолдер
 ```yaml
 image: __IMAGE__
 ```
+
 Файл deployment.yaml 
-``yaml
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -66,6 +67,7 @@ spec:
           ports:
             - containerPort: 8000
 ```
+
 * Измените шаг деплоя в .gitlab-ci.yml,
 чтобы изменять __IMAGE__ на реальное имя образа и тег
 
