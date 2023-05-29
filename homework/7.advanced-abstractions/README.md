@@ -133,33 +133,49 @@ volumeClaimTemplates:
 * Создайте service и ingress для этого стейтфулсета, так чтобы запросы с любым доменом на белый IP
 вашего сервиса nginx-ingress-controller (тот что в нэймспэйсе ingress-nginx с типом LoadBalancer)
 шли на приложение
+
 Создаём service
 Файл service.yaml
 ```yaml
 ---
-kind: Service apiVersion: v1 metadata:
-name: prometheus labels:
-app: prometheus spec:
-clusterIP: None ports:
-- name: admin protocol: TCP port: 9090 targetPort: 9090
-selector:
-app: prometheus
+kind: Service
+apiVersion: v1
+metadata:
+  name: prometheus
+  labels:
+    app: prometheus
+spec:
+  clusterIP: None
+  ports:
+    - name: admin
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: prometheus
 ```
 
 Создаём ingress
 Файл ingress.yaml
 ```yaml
-apiVersion: networking.k8s.io/v1 kind: Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-name: nginx-gateway annotations:
-nginx.ingress.kubernetes.io/rewrite-target: / spec:
-rules: - http:
-paths:
-- path: /
-pathType: Prefix
-backend: service:
-name: prometheus port:
-number: 9090
+  name: nginx-gateway
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus
+            port:
+              number: 9090
 ```
 * Проверьте что при обращении из браузера на белый IP вы видите открывшееся
 приложение Prometheus
