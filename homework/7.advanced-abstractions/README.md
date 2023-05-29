@@ -181,6 +181,7 @@ spec:
 
 * В этом же неймспэйсе создайте DaemonSet node-exporter как в примере к лекции:
 practice/7.advanced-abstractions/daemonset.yaml
+
 Создаём deamonSet:
 файл daemonset.yaml
 
