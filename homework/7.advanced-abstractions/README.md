@@ -74,6 +74,37 @@ volumeClaimTemplate - ReadWriteOnce, 5Gi, подключенный по пути
 Так же укажите поле serviceAccount: prometheus на одном уровне с containers, initContainers, volumes
 См пример с rabbitmq из материалов лекции.
 
+Создаём
+Файл statefulset.yaml
+```yaml
+---
+apiVersion: apps/v1 kind: StatefulSet metadata:
+name: prometheus spec:
+serviceName: prometheus replicas: 1
+selector:
+matchLabels:
+app: prometheus
+template: metadata: labels:
+app: prometheus spec:
+serviceAccount: prometheus initContainers:
+- image: busybox
+name: mount-permissions-fix
+command: ["sh", "-c", "chmod 777 /data"] volumeMounts:
+- name: data
+mountPath: /data terminationGracePeriodSeconds: 10 containers:
+- name: prometheus
+image: prom/prometheus:v2.19.2 ports:
+- name: admin protocol: TCP containerPort: 9090
+imagePullPolicy: Always volumeMounts:
+- name: config-volume mountPath: /etc/prometheus
+volumes:
+- name: config-volume
+configMap:
+name: prometheus-config items:
+- key: prometheus.yml path: prometheus.yml
+volumeClaimTemplates: - metadata:
+name: data spec:
+```
 * Создайте service и ingress для этого стейтфулсета, так чтобы запросы с любым доменом на белый IP
 вашего сервиса nginx-ingress-controller (тот что в нэймспэйсе ingress-nginx с типом LoadBalancer)
 шли на приложение
