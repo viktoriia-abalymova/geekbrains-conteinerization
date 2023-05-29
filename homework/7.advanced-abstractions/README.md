@@ -101,22 +101,34 @@ spec:
           volumeMounts:
           - name: data
           mountPath: /data 
-       terminationGracePeriodSeconds: 10 containers:
-- name: prometheus
-image: prom/prometheus:v2.19.2 ports:
-- name: admin protocol: TCP containerPort: 9090
-imagePullPolicy: Always volumeMounts:
-- name: config-volume mountPath: /etc/prometheus
-volumes:
-- name: config-volume
-configMap:
-name: prometheus-config items:
-- key: prometheus.yml path: prometheus.yml
-volumeClaimTemplates: - metadata:
-name: data spec:
-accessModes: ["ReadWriteOnce"] resources:
-requests: storage: 5Gi
-storageClassName: csi-ceph-hdd-dp1
+       terminationGracePeriodSeconds: 10 
+       containers:
+          - name: prometheus
+          image: prom/prometheus:v2.19.2 
+          ports:
+            - name: admin 
+              protocol: TCP 
+              containerPort: 9090
+       imagePullPolicy: Always 
+       volumeMounts:
+          - name: config-volume 
+            mountPath: /etc/prometheus
+        volumes:
+          - name: config-volume
+             configMap:
+               name: prometheus-config 
+               items:
+                  - key: prometheus.yml 
+                    path: prometheus.yml
+volumeClaimTemplates: 
+  - metadata:
+      name: data 
+      spec:
+        accessModes: ["ReadWriteOnce"] 
+        resources:
+          requests: 
+            storage: 5Gi
+        storageClassName: csi-ceph-hdd-dp1
 ```
 * Создайте service и ingress для этого стейтфулсета, так чтобы запросы с любым доменом на белый IP
 вашего сервиса nginx-ingress-controller (тот что в нэймспэйсе ingress-nginx с типом LoadBalancer)
